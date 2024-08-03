@@ -18,8 +18,9 @@ export interface IAdmin {
   name: string;
   userName: string;
   contactNo: string;
-  passwordHash: string;
+  password: string;
   emailId: string;
+  id?: string;
 }
 
 export interface ILibraryTransaction {

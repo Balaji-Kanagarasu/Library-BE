@@ -15,7 +15,7 @@ const adminSchema = new Schema<IAdmin>(
       type: String,
       required: true,
     },
-    passwordHash: {
+    password: {
       type: String,
       required: true,
     },
@@ -26,7 +26,7 @@ const adminSchema = new Schema<IAdmin>(
   },
   {
     timestamps: true,
-  },
+  }
 );
 
 const AdminModel = model<IAdmin>("AdminModel", adminSchema, "admins");

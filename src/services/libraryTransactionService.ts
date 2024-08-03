@@ -1,4 +1,5 @@
 import { Request } from "express";
+import mongoose from "mongoose";
 import { CONSTANT_MESSAGE } from "../common/constant";
 import { IApiResponse, ILibraryTransaction } from "../common/interface";
 import { errorResponseMap } from "../helpers/helper";
@@ -66,22 +67,78 @@ export const getTransactionsService = async (req: Request) => {
   };
   try {
     const { transactionType, id, bookId, userId, dueDate } = req.body;
-    let transactionData;
-    if (id) {
-      transactionData = await LibraryTransactionModel.findById(id);
-    } else {
-      const queryObj = {
-        ...(transactionType && { transactionType }),
-        ...(bookId && { bookId }),
-        ...(userId && { userId }),
-        ...(dueDate && { dueDate }),
-      };
 
-      transactionData = await LibraryTransactionModel.find(queryObj);
-      if (!transactionData.length) {
-        transactionData = null;
-      }
-    }
+    const query = [
+      ...(id || transactionType || bookId || userId || dueDate
+        ? [
+            {
+              $match: {
+                ...(id && { _id: new mongoose.Types.ObjectId(id) }),
+                ...(transactionType && { transactionType }),
+                ...(bookId && { bookId }),
+                ...(userId && { userId }),
+                ...(dueDate && { dueDate: new Date(dueDate) }),
+              },
+            },
+          ]
+        : []), // Match the transaction by ID
+      {
+        $addFields: {
+          userIdObjectId: {
+            $convert: {
+              input: "$userId",
+              to: "objectId",
+            },
+          },
+          bookIdIdObjectId: {
+            $convert: {
+              input: "$bookId",
+              to: "objectId",
+            },
+          },
+        },
+      },
+      {
+        $lookup: {
+          from: "users", // Collection name for users
+          localField: "userIdObjectId", // Field after conversion
+          foreignField: "_id", // Field from the users collection
+          as: "userDetails", // Output array field
+        },
+      },
+      { $unwind: "$userDetails" }, // Unwind userDetails array
+      {
+        $lookup: {
+          from: "books", // Collection name for users
+          localField: "bookIdIdObjectId", // Field after conversion
+          foreignField: "_id", // Field from the users collection
+          as: "bookDetails", // Output array field
+        },
+      },
+      { $unwind: "$bookDetails" }, // Unwind bookDetails array
+      {
+        $project: {
+          userId: 1,
+          bookId: 1,
+          dueDate: 1,
+          transactionType: 1,
+          userDetails: {
+            id: 1,
+            name: 1,
+            userName: 1,
+            contactNo: 1,
+            emailId: 1,
+          },
+          bookDetails: {
+            _id: 1,
+            name: 1,
+            author: 1,
+            currentStatus: 1,
+          },
+        }, // Specify fields to include in the output
+      },
+    ];
+    const transactionData = await LibraryTransactionModel.aggregate(query);
 
     response.status = CONSTANT_MESSAGE.STATUS.SUCCESS;
     response.message = transactionData

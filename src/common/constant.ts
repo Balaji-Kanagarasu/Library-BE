@@ -7,6 +7,8 @@ export const CONSTANT_MESSAGE = {
     AUTHENTICATION_SUCCESS: "Authentication success",
     AUTHENTICATION_FAILED: "Authentication failed",
     INTERNAL_SERVER_ERROR: "Internal server error",
+    TOKEN_NOT_PROVIDED: "Token not provided",
+    INVALID_TOKEN: "Invalid token",
   },
   MESSAGE: {
     SOMETHING_WENT_WRONG: "Something went wrong",
@@ -23,6 +25,18 @@ export const CONSTANT_MESSAGE = {
     ERROR_IN_UPDATING_USER: "Error in updating user",
     ERROR_IN_DELETING_USER: "Error in deleting user",
     USER_SUCCESSFULLY_DELETED: "User successfully deleted",
+  },
+  ADMIN: {
+    ADMIN_CREATED_SUCCESSFULLY: "Admin created successfully",
+    ADMIN_UPDATED_SUCCESSFULLY: "Admin updated successfully",
+    ADMIN_NAME_ALREADY_EXISTS: "Admin Name already exists",
+    ERROR_CREATING_ADMIN: "Error in creating admin",
+    ERROR_IN_GETTING_ADMINS: "Error in getting admin(s)",
+    NO_ADMIN_FOUND: "No admin(s) found!",
+    ADMIN_FOUND: "admin(s) found!",
+    ERROR_IN_UPDATING_ADMIN: "Error in updating admin",
+    ERROR_IN_DELETING_ADMIN: "Error in deleting admin",
+    ADMIN_SUCCESSFULLY_DELETED: "Admin successfully deleted",
   },
   BOOK: {
     BOOK_CREATED_SUCCESSFULLY: "Book created successfully",
@@ -49,6 +63,8 @@ export const CONSTANT_MESSAGE = {
   ERROR: {
     VALIDATION_ERROR: "Validation error",
     ID_IS_REQUIRED: "Id id required",
+    INVALID_CREDENTIALS: "Invalid Credentials",
+    INCORRECT_PASSWORD: "Incorrect password",
     PLEASE_PROVIDE_A_VALID_NAME: "Please provide a valid name.",
   },
 };

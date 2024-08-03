@@ -1,11 +1,16 @@
 import Joi, { ObjectSchema } from "joi";
 import { isValidObjectId } from "mongoose";
-import { ILibraryTransaction } from "src/common/interface";
+import {
+  IAdmin,
+  IBook,
+  ILibraryTransaction,
+  IUser,
+} from "src/common/interface";
 
 /**
  * Schema for crete user input validation.
  */
-export const userValidation = Joi.object({
+export const userValidation: ObjectSchema<IUser> = Joi.object({
   name: Joi.string().min(3).max(50).required(),
   userName: Joi.string().min(3).max(30).required(),
   contactNo: Joi.string()
@@ -15,9 +20,22 @@ export const userValidation = Joi.object({
 });
 
 /**
+ * Schema for crete user input validation.
+ */
+export const adminValidation: ObjectSchema<IAdmin> = Joi.object({
+  name: Joi.string().min(3).max(50).required(),
+  userName: Joi.string().min(3).max(30).required(),
+  password: Joi.string().min(8).max(20).required(),
+  contactNo: Joi.string()
+    .pattern(/^[0-9]{10}$/)
+    .required(),
+  emailId: Joi.string().email().required(),
+});
+
+/**
  * Schema for crete book input validation.
  */
-export const bookValidation = Joi.object({
+export const bookValidation: ObjectSchema<IBook> = Joi.object({
   name: Joi.string().min(3).max(50).required(),
   author: Joi.string().min(3).max(30).required(),
   currentStatus: Joi.string().optional(),
